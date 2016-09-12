@@ -9,6 +9,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using DevExpress.XtraEditors;
+using TDUCFM.DataBase;
+using TDUCFM.Models;
 
 namespace TDUCFM
 {
@@ -24,8 +26,22 @@ namespace TDUCFM
             using (PrincipalContext context = new PrincipalContext(ContextType.Domain,"south.vcb.com"))
             {
                 valid = context.ValidateCredentials(txeUserName.Text, txePassword.Text);
+                MessageBox.Show(txePassword.Text);
             }
             MessageBox.Show(valid.ToString());
-        }
+            if (valid)
+            {
+            
+                User logginguser;
+                using (TDUCFMDataContext context1 = new TDUCFMDataContext())
+                {
+                    logginguser = context1.Users.FirstOrDefault(u => u.UserName == txeUserName.Text);
+                }
+                if (logginguser != null)
+                {
+                    MessageBox.Show(logginguser.UserRole.ToString());
+                }
+            }
+            }
     }
 }
